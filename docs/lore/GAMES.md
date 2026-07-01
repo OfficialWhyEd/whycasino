@@ -95,6 +95,15 @@
 
 ---
 
+## 🎬 Video introduttivi (feature)
+Alcuni giochi partono con un **video intro** prima dell'avvio (come le cinematiche Evolution/Pragmatic).
+Esempi confermati: **MotorFrank Turbo**, **People Podcast Slot**. Path asset: `/assets/games/<slug>/intro.mp4`.
+Da generare/montare dai reference (video in `references/videos/`). Campo dati futuro: `intro?: string`.
+
+| Slot | Ispirata a | Pers. | Lore |
+|--|--|--|--|
+| **People Podcast Slot** | slot con intro cinematica | crew | Set da podcast della crew; **video intro** con i personaggi che presentano il giro, poi reels a tema microfoni/clip virali. |
+
 ## Sistema trasversale
 - **Win call-out:** `PAZZESCO!` (big) · `VINARK!` (mega) · `RICOTTATI!` (bonus) · `GALERA!` (bust ironico) · `GHE-GO!` (spin start) · `SPQR` (jackpot).
 - **Achievement → WhyCoins:** "Far Orani è arrivato" (1° login), "Snail Team" (10 Crazy Orani), "SPQR" (100x), "Missione Argiam" (streak roulette), "Ricottati" (primo bonus), "Galera" (10 perdite di fila, ironico).

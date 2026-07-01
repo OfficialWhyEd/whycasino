@@ -30,8 +30,8 @@ simbolo**, una **catchphrase**, e uno o più **giochi** collegati.
 - **Vibe:** cosmico, epico, sci-fi.
 - **Giochi:** **Argiam Lightning** (parodia Lightning Roulette) / roulette spaziale "fulmini".
 
-### 🦕 IL TRICERATOPO (?) — Tony/Tonyde/Estrada?
-- **Meme world:** dinosauro/preistoria, triceratopo iper-realistico con volto umano, savana e vallate giurassiche, piercing al naso + catena d'oro.
+### 🦕 DINO ESTRADA — Antho (Anthony Estrada) ✅ confermato
+- **Meme world:** dinosauro/preistoria, triceratopo iper-realistico **con la faccia di Antho**, savana e vallate giurassiche, piercing al naso + catena d'oro.
 - **Vibe:** primordiale, potente, "tesoro perduto".
 - **Giochi:** **Dino Estrada** / "Preistoria" — slot avventura-tesoro (parodia Gonzo's/Jurassic).
 
