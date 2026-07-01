@@ -4,3 +4,4 @@ dist/
 .env.*
 .DS_Store
 references/
+pnpm-lock.yaml
