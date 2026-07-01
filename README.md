@@ -1,8 +1,8 @@
 <h1 align="center">🎰 WhyCasinò</h1>
 
 <p align="center">
-  <b>Il social casino della crew.</b> Slot e live casino stile Evolution/Stake, dollari finti,
-  personaggi e lore basati sugli amici. Ispirato a 888/Stake ma completamente originale.
+  <b>Il social casino folle.</b> Slot e live casino stile Evolution/Stake, dollari finti,
+  personaggi e lore basati su Far Orani e i suoi fedeli compagni. Ispirato a 888/Stake ma completamente originale.
 </p>
 
 <p align="center">
