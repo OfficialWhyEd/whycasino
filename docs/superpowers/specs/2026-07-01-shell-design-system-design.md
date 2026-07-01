@@ -111,8 +111,10 @@ Tutti i tipi dei dati (Game, Player, LeaderboardEntry, Achievement, Wallet) vivo
 
 ## 6. Dati finti (mock)
 
-Modulo `apps/web/src/mock/`:
-- **Giochi** con nomi/lore della crew: *Crazy Orani* (da Far Orani) e altri derivati da Frank (Franco Argiolas), Tony/Tonyde (Anthony Estrada), Gimmi, Drem/DremsVibe (Andre Macellaro), ecc. — nomi "quasi-originali" ispirati a titoli Evolution/slot famose ma personalizzati.
+Modulo `apps/web/src/mock/` — alimentato dalla lore in [`docs/lore/LORE.md`](../../lore/LORE.md) e dal catalogo [`docs/lore/GAMES.md`](../../lore/GAMES.md):
+- **Giochi** con nomi/lore della crew: *Crazy Orani* (Far Orani 🐌, gioco-bandiera), *Argiam Lightning* (astronauta 🚀), *MotorFrank Wheel* (Frank 🏍️), *Dino Estrada* (triceratopo 🦕), *Abissi Bonanza* (pesce 🐡), *SPQR: Porte di Roma*, *DremVibe Neon*, *Fast Slime Rush* — nomi "ispirati ma originali".
+- **Catchphrase** del gruppo per i win call-out: PAZZESCO!, VINARK!, RICOTTATI!, GALERA!, GHE-GO!, SPQR.
+- Reference visive (foto/video amici) in `references/` — **solo locale, gitignored**, usate poi come base per la generazione asset Gemini.
 - **Classifiche** finte (daily/weekly) con la crew.
 - **Wallet** finto e **achievement** finti.
 
