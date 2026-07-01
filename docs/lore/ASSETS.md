@@ -16,6 +16,11 @@
 - Set icone catchphrase (PAZZESCO!, VINARK!, GALERA!, GHE-GO!, SPQR, RICOTTATI!).
 - Texture/sfondi UI (vetro, neon, oro VIP).
 
+## ⚠️ REGOLA #1 — Face consistency (non negoziabile)
+In OGNI asset che ritrae un membro della crew, **il volto deve restare identico alla persona reale**
+dei reference. Mai volti inventati o "somiglianti". Tecnica: image-to-image con reference conditioning
+forte + prompt che blocca i tratti. Ogni personaggio ha un reference facciale canonico in `references/images/`.
+
 ## Art direction unica (coerenza)
 - Palette: nero/blu notte + neon viola-verde + oro VIP.
 - Stile: 3D cinematografico + tocchi cartoon per i personaggi; illuminazione drammatica, glow.

@@ -91,6 +91,7 @@
 | 47 | **Fast Slime Rush** | slot arcade | 🐌 | Slot iper-veloce (paradosso lumaca), moltiplicatori a catena. |
 | 48 | **DremVibe Neon** | slot musicale | 🎸 | Concerto punk di Cagliari, bonus backstage. |
 | 49 | **MotorFrank Turbo** | slot racing | 🏍️ | Griglia di partenza, respin nitro. |
+| 50 | ⭐ **Ciurma 4 (PirOrani)** | Pirots 4 (ELK) | crew | Griglia collection: 4 creature-ciurma coi **volti reali della crew** (Far Orani, Frank, Argiam, Dino) si muovono raccogliendo simboli, sbloccano aree, feature a catena, rivisitazione incredibile. **I volti restano identici ai reference.** |
 
 ---
 

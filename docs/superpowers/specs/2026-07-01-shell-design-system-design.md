@@ -32,6 +32,9 @@ whycasino/
 
 - **Frontend:** React + Vite + TypeScript, deploy su **Cloudflare Pages**.
 - **Backend giochi live (futuro):** **Cloudflare Workers + Durable Objects** — un DO per tavolo che tiene l'orologio e gira i round anche a zero utenti connessi, RNG server-side, WebSocket ai client, **provably-fair** (seed hashato + reveal).
+- **Modello "live" scelto:** tavoli **real-time server-side** con motion-graphics di altissima qualità, sempre in funzione, architettati per accogliere in seguito **croupier AI** (Crazy Orani per primo). No video con dealer umani.
+- **Parità catalogo:** copertura dell'intero lineup Evolution + slot degli studi del gruppo, ognuno ricostruito "uno per uno" e fedele nelle meccaniche (vedi `docs/lore/GAMES.md`), incl. **Ciurma 4 (PirOrani)** su meccanica Pirots 4.
+- **Face consistency:** regola non negoziabile — i volti reali della crew restano identici in ogni asset (vedi `docs/lore/ASSETS.md`).
 - **Asset visivi:** generati una tantum con **Gemini 2.5 Flash Image (Nano Banana)**, rifiniti e committati come file statici (non generazione a runtime).
 
 ### Roadmap sotto-progetti (ordine)
