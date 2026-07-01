@@ -21,7 +21,11 @@
 - **Generare le copertine di tutti i 50 giochi** con Pollinations (gratis): `node services/assetgen/covers.mjs` (sequenziale con backoff — Pollinations limita le richieste concorrenti/rapide, 429). Salta quelle già fatte. Poi committare `apps/web/public/assets/games/<slug>/cover.png` e deployare. Il codice le carica già via `onError` sulla GameCard.
 - **Logo/emblema definitivo** + set icone (PWA), mascotte Far Orani.
 - **Volti fedeli** (regola ferrea): ritratti/personaggi img2img dalle foto reali → valutare Nano Banana con billing.
-- ⚠️ **Chiavi Gemini**: free tier ha quota IMMAGINI = 0 (`limit: 0`). Nano Banana richiede **billing attivo** (~$0.03/img). Alternativa gratis illimitata trovata: **Pollinations.ai** (no key, modelli Flux) — ottima per non-volti.
+- ⚠️ **Chiavi Gemini**: free tier ha quota IMMAGINI = 0 (`limit: 0`). Nano Banana richiede **billing attivo** (~$0.03/img).
+- **Motori immagine GRATIS (vedi memoria `reference-image-gen-gratis`):**
+  - **Pollinations.ai** (no key, Flux) — `services/assetgen/covers.mjs`. Ottimo per copertine/sfondi SENZA volto.
+  - **Cloudflare Workers AI** (account Edo, free tier): `@cf/black-forest-labs/flux-2-dev` (FLUX.2, qualità top) e ⭐ `flux-2-klein` (**generazione + EDITING/img2img**). REST: `POST https://api.cloudflare.com/client/v4/accounts/23ba9989701c2051ec6b080558eb5c3c/ai/run/<model>` con token Workers AI (da creare in dashboard). → path GRATIS per i **volti fedeli** via img2img dalle foto reali, senza billing Gemini.
+  - **Strategia**: Pollinations + Cloudflare in **parallelo** (velocità + mix qualità). FLUX.2 = miglior free ora.
 
 ### Feature non ancora costruite
 - **PWA "Aggiungi alla schermata Home"**: manifest + service worker + icona → installabile come app. Pop-up-tutorial (dopo la presentazione + ogni tot) che mostra Share → "Aggiungi alla schermata Home" (immagine di riferimento: screenshot Share sheet iOS con Stake). iOS = tutorial manuale; Android/desktop = `beforeinstallprompt`. Rilevare `display-mode: standalone` per non mostrarlo a chi ce l'ha.
