@@ -1,62 +1,323 @@
 :root {
-  --wc-bg: #07070d;
-  --wc-bg-2: #0d0d18;
-  --wc-surface: rgba(255, 255, 255, 0.04);
-  --wc-surface-2: rgba(255, 255, 255, 0.07);
-  --wc-surface-border: rgba(255, 255, 255, 0.09);
-  --wc-neon-violet: #8b5cf6;
-  --wc-neon-violet-2: #b28bff;
-  --wc-neon-green: #7cff6b;
+  color-scheme: dark;
+
+  /* ---- Base canvas: near-black blu-notte, mai #000 ---- */
+  --wc-bg: #06060e;
+  --wc-bg-2: #0a0a15;
+  --wc-bg-3: #101021;
+
+  /* ---- Superfici ---- */
+  --wc-surface: rgba(255, 255, 255, 0.035);
+  --wc-surface-2: rgba(255, 255, 255, 0.06);
+  --wc-surface-3: rgba(255, 255, 255, 0.09);
+  --wc-surface-solid: #12121f;
+  --wc-surface-solid-2: #17172a;
+  --wc-border: rgba(255, 255, 255, 0.08);
+  --wc-border-strong: rgba(255, 255, 255, 0.14);
+
+  /* ---- Neon identità (funzionale) ---- */
+  --wc-violet: #8b5cf6;
+  --wc-violet-2: #b28bff;
+  --wc-violet-ink: #cbb6ff;
+  --wc-green: #7cff6b;
+  --wc-green-2: #b0ffa6;
+  --wc-cyan: #35e6ff;
   --wc-gold: #f5c542;
+  --wc-gold-2: #ffe08a;
   --wc-danger: #ff5c72;
-  --wc-text: #ededf5;
-  --wc-text-dim: #9a9ab0;
+
+  /* ---- Testo (3 livelli) ---- */
+  --wc-text: #f2f2fa;
+  --wc-text-dim: #a2a2be;
+  --wc-text-mute: #6d6d88;
+
+  /* ---- Spacing (8px grid) ---- */
   --wc-space-1: 4px;
   --wc-space-2: 8px;
   --wc-space-3: 12px;
   --wc-space-4: 16px;
+  --wc-space-5: 20px;
   --wc-space-6: 24px;
   --wc-space-8: 32px;
   --wc-space-12: 48px;
+  --wc-space-16: 64px;
+
+  /* ---- Radius ---- */
+  --wc-radius-sm: 10px;
   --wc-radius: 14px;
   --wc-radius-lg: 22px;
+  --wc-radius-xl: 28px;
   --wc-radius-pill: 999px;
-  --wc-glow: 0 0 24px rgba(139, 92, 246, 0.45);
-  --wc-glow-green: 0 0 22px rgba(124, 255, 107, 0.4);
+
+  /* ---- Ombre tintate (mai neon outer-glow generico) ---- */
+  --wc-shadow-1: 0 4px 20px -8px rgba(4, 4, 12, 0.7);
+  --wc-shadow-2: 0 18px 44px -20px rgba(4, 4, 14, 0.85);
+  --wc-shadow-card: 0 20px 44px -22px rgba(0, 0, 0, 0.72);
+  --wc-glow-violet: 0 0 0 1px rgba(139, 92, 246, 0.35), 0 14px 40px -14px rgba(139, 92, 246, 0.5);
+  --wc-glow-green: 0 0 0 1px rgba(124, 255, 107, 0.28), 0 12px 34px -14px rgba(124, 255, 107, 0.4);
+
+  /* ---- Tipografia ---- */
   --wc-font-display: "Space Grotesk", system-ui, sans-serif;
-  --wc-font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --wc-font: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* ---- Safe-area (iPhone notch / home indicator) ---- */
+  --wc-safe-top: env(safe-area-inset-top, 0px);
+  --wc-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --wc-safe-left: env(safe-area-inset-left, 0px);
+  --wc-safe-right: env(safe-area-inset-right, 0px);
+
+  /* Altezza bottom tab bar (mobile) per compensare il padding del main */
+  --wc-tabbar-h: 62px;
 }
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   margin: 0;
   background:
-    radial-gradient(1200px 700px at 80% -10%, rgba(139, 92, 246, 0.16), transparent 60%),
-    radial-gradient(900px 600px at 0% 10%, rgba(124, 255, 107, 0.08), transparent 55%),
+    radial-gradient(1100px 640px at 82% -8%, rgba(139, 92, 246, 0.16), transparent 58%),
+    radial-gradient(820px 560px at -6% 4%, rgba(53, 230, 255, 0.08), transparent 55%),
+    radial-gradient(700px 520px at 50% 108%, rgba(124, 255, 107, 0.06), transparent 60%),
     var(--wc-bg);
+  background-attachment: fixed;
   color: var(--wc-text);
   font-family: var(--wc-font);
-  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100dvh;
 }
 
+/* Numeri sempre tabellari nelle classi utility */
+.wc-num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* ---- Superficie vetro con inner refraction ---- */
 .wc-surface {
-  background: var(--wc-surface);
-  border: 1px solid var(--wc-surface-border);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  border: 1px solid var(--wc-border);
   border-radius: var(--wc-radius-lg);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px) saturate(1.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    var(--wc-shadow-1);
 }
 
+.wc-hairline {
+  border-top: 1px solid var(--wc-border);
+}
+
+/* ---- Container ---- */
+.wc-container {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding-left: max(16px, var(--wc-safe-left));
+  padding-right: max(16px, var(--wc-safe-right));
+}
+
+/* ---- Rail orizzontale (scroll-snap, mobile-first) ---- */
+.wc-rail {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 46%;
+  gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+.wc-rail::-webkit-scrollbar {
+  display: none;
+}
+.wc-rail > * {
+  scroll-snap-align: start;
+}
+/* Bleed del rail oltre il container su mobile per un feel "app" */
+.wc-rail-bleed {
+  margin-left: calc(-1 * max(16px, var(--wc-safe-left)));
+  margin-right: calc(-1 * max(16px, var(--wc-safe-right)));
+  padding-left: max(16px, var(--wc-safe-left));
+  padding-right: max(16px, var(--wc-safe-right));
+}
+
+/* ---- Griglia giochi (2 col mobile → auto crescente) ---- */
+.wc-grid-games {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+/* ---- Layout pagina gioco ---- */
 .wc-game-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
-  gap: 20px;
+  grid-template-columns: 1fr;
+  gap: 16px;
 }
 
-@media (max-width: 820px) {
+/* ---- Tap target minimo ---- */
+.wc-tap {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* ---- Responsive show/hide (breakpoint desktop = 821px) ---- */
+.wc-desktop-only {
+  display: none;
+}
+.wc-mobile-only {
+  display: initial;
+}
+@media (min-width: 821px) {
+  .wc-desktop-only {
+    display: initial;
+  }
+  .wc-mobile-only {
+    display: none !important;
+  }
+}
+
+/* Nav orizzontale desktop (flex), nascosto su mobile */
+.wc-topnav {
+  display: none;
+}
+@media (min-width: 821px) {
+  .wc-topnav {
+    display: flex;
+  }
+}
+
+/* Filtri/chip a scorrimento orizzontale su mobile */
+.wc-chips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+}
+.wc-chips::-webkit-scrollbar {
+  display: none;
+}
+.wc-chips > * {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+}
+
+/* Link "Vedi tutti" nelle intestazioni di sezione */
+.wc-see-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  min-height: 34px;
+  border-radius: var(--wc-radius-pill);
+  background: var(--wc-surface-2);
+  border: 1px solid var(--wc-border);
+  color: var(--wc-text-dim);
+  text-decoration: none;
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.wc-see-all::after {
+  content: "›";
+  font-size: 15px;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+.wc-see-all:hover {
+  color: var(--wc-text);
+  border-color: var(--wc-border-strong);
+  background: var(--wc-surface-3);
+}
+
+/* Glyph key-art dell'hero: più piccolo su schermi stretti */
+@media (max-width: 560px) {
+  .wc-hero-glyph {
+    font-size: 150px !important;
+    right: -8% !important;
+    opacity: 0.9;
+  }
+}
+
+@media (min-width: 481px) {
+  .wc-grid-games {
+    grid-template-columns: repeat(auto-fill, minmax(158px, 1fr));
+    gap: 14px;
+  }
+  .wc-rail {
+    grid-auto-columns: 200px;
+    gap: 14px;
+  }
+}
+
+@media (min-width: 821px) {
   .wc-game-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 20px;
+  }
+}
+
+/* ======================================================================
+   KEYFRAMES (hardware-accelerated: transform / opacity)
+   ====================================================================== */
+@keyframes wc-rise {
+  0% { transform: translateY(14px); opacity: 0; }
+  60% { transform: translateY(-2px); opacity: 1; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+@keyframes wc-float {
+  0%, 100% { transform: translateY(0) rotate(var(--wc-rot, 0deg)); }
+  50% { transform: translateY(-6px) rotate(var(--wc-rot, 0deg)); }
+}
+@keyframes wc-sheen {
+  0% { transform: translateX(-140%) skewX(-18deg); }
+  100% { transform: translateX(260%) skewX(-18deg); }
+}
+@keyframes wc-breathe {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.015); }
+}
+@keyframes wc-pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.82); }
+}
+@keyframes wc-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.wc-reveal {
+  animation: wc-rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--i, 0) * 45ms);
+}
+
+:where(button, a, [tabindex]):focus-visible {
+  outline: 2px solid var(--wc-violet-2);
+  outline-offset: 2px;
+  border-radius: var(--wc-radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }
