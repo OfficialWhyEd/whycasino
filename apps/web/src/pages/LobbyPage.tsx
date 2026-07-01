@@ -92,7 +92,7 @@ export function LobbyPage() {
 
       <StatStrip stats={LIVE_STATS} />
 
-      <div style={{ marginTop: 14 }}>
+      <div style={{ marginTop: 18 }}>
         <LiveWinsMarquee
           wins={RECENT_WINS}
           onOpen={(slug) => navigate(`/game/${slug}`)}
@@ -130,8 +130,10 @@ export function LobbyPage() {
         </div>
       ))}
 
-      <SectionHeader title="Tutti i giochi" icon="games" count={GAMES.length} />
-      <GamesGrid games={GAMES} />
+      <div style={{ marginTop: 30 }}>
+        <SectionHeader title="Tutti i giochi" icon="games" count={GAMES.length} />
+        <GamesGrid games={GAMES} />
+      </div>
     </>
   );
 }
