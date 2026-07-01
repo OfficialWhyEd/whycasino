@@ -34,13 +34,15 @@ forte + prompt che blocca i tratti. Ogni personaggio ha un reference facciale ca
 4. **Rifinitura & commit** — output in `apps/web/public/assets/games/<slug>/`, committati (solo generati, no foto reali).
 5. **Placeholder → reale** — la shell usa placeholder finché l'asset reale non è pronto; sostituzione senza refactor (stesso path/nome).
 
-## Requisiti
-- **Chiave Gemini** (Google AI Studio) — da fornire/sbloccare. Modello: `gemini-2.5-flash-image` (Nano Banana).
-- Rispetto rate limit free tier → generazione in batch schedulati, non a runtime.
+## Modelli (chiave verificata ✅ — accesso confermato)
+- **Hero / personaggi / logo:** `gemini-3-pro-image` (massima qualità) o `imagen-4.0-ultra-generate-001`.
+- **Batch copertine/sfondi:** `gemini-3.1-flash-image` o `gemini-2.5-flash-image` (Nano Banana).
+- Endpoint: `https://generativelanguage.googleapis.com/v1beta/models/<model>:generateContent?key=...`
+- 3 chiavi disponibili → rotazione per rate limit. Generazione in **batch**, non a runtime.
 
 ## Stato
-- [ ] Chiave Gemini disponibile a Claude
+- [x] Chiave Gemini disponibile e verificata (in `.env`, gitignored)
 - [ ] Prompt library iniziale
-- [ ] Script assetgen
+- [ ] Script assetgen (con rotazione chiavi)
 - [ ] Manifest `assets.json` per i primi giochi
 - [ ] Logo WhyCasinò + mascotte Far Orani
