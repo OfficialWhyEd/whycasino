@@ -1,35 +1,64 @@
 import { useNavigate } from "react-router-dom";
-import { GameCard } from "@whycasino/ui";
+import { GameCard, Rail } from "@whycasino/ui";
 import type { Game } from "@whycasino/shared";
 
+/** Griglia giochi completa (pagine catalogo). Mobile-first: 2 col → auto. */
 export function GamesGrid({ games }: { games: Game[] }) {
   const navigate = useNavigate();
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
-        gap: 14,
-      }}
-    >
-      {games.map((g) => (
-        <GameCard key={g.slug} game={g} onOpen={(slug) => navigate(`/game/${slug}`)} />
+    <div className="wc-grid-games">
+      {games.map((g, i) => (
+        <GameCard
+          key={g.slug}
+          game={g}
+          index={i}
+          onOpen={(slug) => navigate(`/game/${slug}`)}
+        />
       ))}
     </div>
   );
 }
 
-export function SectionTitle({ children }: { children: React.ReactNode }) {
+/** Rail orizzontale di giochi (lobby). Snap-scroll su mobile. */
+export function GamesRail({ games }: { games: Game[] }) {
+  const navigate = useNavigate();
   return (
-    <h2
+    <Rail>
+      {games.map((g, i) => (
+        <GameCard
+          key={g.slug}
+          game={g}
+          index={i}
+          onOpen={(slug) => navigate(`/game/${slug}`)}
+        />
+      ))}
+    </Rail>
+  );
+}
+
+/** Empty state condiviso. */
+export function EmptyGames({ label }: { label: string }) {
+  return (
+    <div
+      className="wc-surface"
       style={{
-        fontFamily: "var(--wc-font-display)",
-        fontWeight: 800,
-        fontSize: 20,
-        margin: "28px 0 12px",
+        padding: "40px 24px",
+        textAlign: "center",
+        color: "var(--wc-text-dim)",
       }}
     >
-      {children}
-    </h2>
+      <div
+        style={{
+          fontFamily: "var(--wc-font-display)",
+          fontWeight: 700,
+          fontSize: 18,
+          color: "var(--wc-text)",
+          marginBottom: 6,
+        }}
+      >
+        Nessun gioco qui… ancora
+      </div>
+      {label}
+    </div>
   );
 }

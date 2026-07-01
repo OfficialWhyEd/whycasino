@@ -1,34 +1,21 @@
 import { useState } from "react";
-import { Leaderboard } from "@whycasino/ui";
+import { Leaderboard, Segmented, SectionHeader, type SegmentOption } from "@whycasino/ui";
 import { DAILY, WEEKLY } from "../mock/players";
-import { SectionTitle } from "../components/GamesGrid";
+
+type Tab = "daily" | "weekly";
+
+const OPTIONS: SegmentOption<Tab>[] = [
+  { key: "daily", label: "Giornaliera", accent: "var(--wc-gold)" },
+  { key: "weekly", label: "Settimanale", accent: "var(--wc-gold)" },
+];
 
 export function LeaderboardPage() {
-  const [tab, setTab] = useState<"daily" | "weekly">("daily");
+  const [tab, setTab] = useState<Tab>("daily");
   return (
     <>
-      <SectionTitle>🏆 Classifiche della crew</SectionTitle>
-      <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
-        {(["daily", "weekly"] as const).map((t) => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            style={{
-              padding: "10px 18px",
-              borderRadius: "var(--wc-radius-pill)",
-              border: "1px solid var(--wc-surface-border)",
-              cursor: "pointer",
-              fontWeight: 800,
-              color: tab === t ? "#0b0b12" : "var(--wc-text-dim)",
-              background:
-                tab === t
-                  ? "linear-gradient(135deg, var(--wc-gold), #ff9f43)"
-                  : "var(--wc-surface)",
-            }}
-          >
-            {t === "daily" ? "Giornaliera" : "Settimanale"}
-          </button>
-        ))}
+      <SectionHeader title="Classifiche della crew" icon="trophy" accent="var(--wc-gold)" />
+      <div style={{ marginBottom: 22 }}>
+        <Segmented id="board" options={OPTIONS} value={tab} onChange={setTab} />
       </div>
       <Leaderboard entries={tab === "daily" ? DAILY : WEEKLY} variant={tab} />
     </>

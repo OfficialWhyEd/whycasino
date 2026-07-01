@@ -1,60 +1,58 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
+import {
+  Segmented,
+  SectionHeader,
+  CATEGORY_THEME,
+  type SegmentOption,
+} from "@whycasino/ui";
 import type { GameCategory } from "@whycasino/shared";
 import { GAMES } from "../mock/games";
-import { GamesGrid, SectionTitle } from "../components/GamesGrid";
+import { GamesGrid, EmptyGames } from "../components/GamesGrid";
 
-const CATEGORIES: { key: GameCategory | "all"; label: string }[] = [
+type Filter = GameCategory | "all";
+
+const OPTIONS: SegmentOption<Filter>[] = [
   { key: "all", label: "Tutti" },
-  { key: "live", label: "Game Show" },
-  { key: "roulette", label: "Roulette" },
-  { key: "blackjack", label: "Blackjack" },
-  { key: "baccarat", label: "Baccarat" },
-  { key: "poker", label: "Poker" },
-  { key: "slot", label: "Slot" },
+  { key: "live", label: "Game Show", accent: CATEGORY_THEME.live.accent },
+  { key: "slot", label: "Slot", accent: CATEGORY_THEME.slot.accent },
+  { key: "roulette", label: "Roulette", accent: CATEGORY_THEME.roulette.accent },
+  { key: "blackjack", label: "Blackjack", accent: CATEGORY_THEME.blackjack.accent },
+  { key: "baccarat", label: "Baccarat", accent: CATEGORY_THEME.baccarat.accent },
+  { key: "poker", label: "Poker", accent: CATEGORY_THEME.poker.accent },
 ];
+
+const VALID = new Set<Filter>(OPTIONS.map((o) => o.key));
 
 export function CategoryPage() {
   const { category } = useParams<{ category: string }>();
-  const [filter, setFilter] = useState<GameCategory | "all">(
-    (category as GameCategory) ?? "all",
-  );
+  const initial = (category && VALID.has(category as Filter) ? category : "all") as Filter;
+  const [filter, setFilter] = useState<Filter>(initial);
+
+  // se cambio rotta (es. dalla tab bar) sincronizzo il filtro
+  useEffect(() => {
+    setFilter(category && VALID.has(category as Filter) ? (category as Filter) : "all");
+  }, [category]);
 
   const games = useMemo(
     () => (filter === "all" ? GAMES : GAMES.filter((g) => g.category === filter)),
     [filter],
   );
 
+  const label = filter === "all" ? "il catalogo" : CATEGORY_THEME[filter].label;
+
   return (
     <>
-      <SectionTitle>Catalogo giochi</SectionTitle>
-      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
-        {CATEGORIES.map((c) => (
-          <button
-            key={c.key}
-            onClick={() => setFilter(c.key)}
-            style={{
-              padding: "8px 14px",
-              borderRadius: "var(--wc-radius-pill)",
-              border: "1px solid var(--wc-surface-border)",
-              cursor: "pointer",
-              fontWeight: 700,
-              fontSize: 13,
-              color: filter === c.key ? "#0b0b12" : "var(--wc-text-dim)",
-              background:
-                filter === c.key
-                  ? "linear-gradient(135deg, var(--wc-neon-violet-2), var(--wc-neon-green))"
-                  : "var(--wc-surface)",
-            }}
-          >
-            {c.label}
-          </button>
-        ))}
+      <SectionHeader title="Catalogo" icon="games" count={games.length} />
+      <div className="wc-rail-bleed" style={{ marginBottom: 18 }}>
+        <Segmented id="cat" options={OPTIONS} value={filter} onChange={setFilter} />
       </div>
-      <div style={{ color: "var(--wc-text-dim)", fontSize: 13, marginBottom: 14 }}>
-        {games.length} giochi
-      </div>
-      <GamesGrid games={games} />
+
+      {games.length ? (
+        <GamesGrid games={games} />
+      ) : (
+        <EmptyGames label={`Nessun gioco in ${label}.`} />
+      )}
     </>
   );
 }

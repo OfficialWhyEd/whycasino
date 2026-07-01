@@ -80,3 +80,13 @@ export const gamesByCategory = (category: Game["category"]) =>
 export const liveGames = () => GAMES.filter((g) => g.isLive);
 
 export const gameBySlug = (slug: string) => GAMES.find((g) => g.slug === slug);
+
+/** Giochi correlati: stessa categoria, escluso quello corrente. */
+export const relatedGames = (slug: string, limit = 8) => {
+  const game = gameBySlug(slug);
+  if (!game) return [];
+  return GAMES.filter((g) => g.category === game.category && g.slug !== slug).slice(
+    0,
+    limit,
+  );
+};
