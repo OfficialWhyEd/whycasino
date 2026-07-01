@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { JackpotTicker } from "./JackpotTicker";
 
 const STEPS = [10, 50, 100, 500];
 
@@ -7,12 +8,19 @@ const STEPS = [10, 50, 100, 500];
 export function BetPanel({
   balance,
   onSpin,
+  multiplier = 100,
+  accent = "var(--wc-violet-2)",
 }: {
   balance: number;
   onSpin: (amount: number) => void;
+  /** moltiplicatore max del gioco per l'anteprima "vincita potenziale" */
+  multiplier?: number;
+  /** accento del gioco (tinta la barra vincita) */
+  accent?: string;
 }) {
   const [amount, setAmount] = useState(50);
   const clamp = (n: number) => Math.max(10, Math.min(balance, n));
+  const potential = amount * multiplier;
 
   return (
     <div className="wc-surface" style={{ padding: 16, display: "grid", gap: 13 }}>
@@ -44,6 +52,46 @@ export function BetPanel({
           }}
         >
           {amount.toLocaleString("it-IT")} WC
+        </span>
+      </div>
+
+      {/* anteprima vincita potenziale (puntata × moltiplicatore max) */}
+      <div
+        style={{
+          position: "relative",
+          overflow: "hidden",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "10px 13px",
+          borderRadius: "var(--wc-radius)",
+          background: `linear-gradient(135deg, rgba(245,197,66,0.1), rgba(245,197,66,0.02))`,
+          border: "1px solid rgba(245,197,66,0.28)",
+        }}
+      >
+        <span
+          style={{
+            fontSize: 11,
+            fontWeight: 700,
+            textTransform: "uppercase",
+            letterSpacing: 0.6,
+            color: "var(--wc-text-mute)",
+          }}
+        >
+          Vincita fino a{" "}
+          <span style={{ color: accent }}>{multiplier}x</span>
+        </span>
+        <span
+          className="wc-num"
+          style={{
+            fontFamily: "var(--wc-font-display)",
+            fontWeight: 800,
+            fontSize: 19,
+            color: "var(--wc-gold-2)",
+            textShadow: "0 0 16px rgba(245,197,66,0.35)",
+          }}
+        >
+          <JackpotTicker value={potential} />
         </span>
       </div>
 

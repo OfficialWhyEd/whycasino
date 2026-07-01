@@ -73,3 +73,48 @@ export function characterName(character?: string): string | null {
   if (!character) return null;
   return character.replace(/\p{Extended_Pictographic}|‍|️/gu, "").trim() || null;
 }
+
+/* ------------------------------------------------------------------ *
+ *  Segnali di "casinò vivo": derivati deterministici dallo slug.
+ *  Servono a rendere ogni card ricca e credibile (giocatori al tavolo,
+ *  moltiplicatore massimo, hot) senza dati reali — stabili tra i render.
+ * ------------------------------------------------------------------ */
+function hashSlug(slug: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < slug.length; i++) {
+    h ^= slug.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return (h >>> 0) / 4294967295; // 0..1
+}
+
+/** Numero di giocatori "al tavolo" (deterministico, 40–2600). */
+export function playersOnline(slug: string): number {
+  const r = hashSlug(slug + "p");
+  return Math.round((40 + r * 2560) / 4) * 4;
+}
+
+/** Moltiplicatore max mostrato sulla card (deterministico, 20–1000x). */
+export function maxMultiplier(slug: string): number {
+  const r = hashSlug(slug + "x");
+  const steps = [20, 50, 100, 200, 250, 500, 1000];
+  return steps[Math.floor(r * steps.length)];
+}
+
+/** True per ~1 card su 4 → tag "HOT" oro parsimonioso. */
+export function isHot(slug: string): boolean {
+  return hashSlug(slug + "h") > 0.74;
+}
+
+/** Etichetta "studio/provider" a tema crew per categoria (micro-label editoriale). */
+export function providerLabel(category: GameCategory): string {
+  const map: Record<GameCategory, string> = {
+    live: "Crew Live Studios",
+    roulette: "Argiam Gaming",
+    blackjack: "Feltro Sardo",
+    baccarat: "Faro Orani VIP",
+    poker: "SPQR Poker Room",
+    slot: "Nano Banana Slots",
+  };
+  return map[category];
+}

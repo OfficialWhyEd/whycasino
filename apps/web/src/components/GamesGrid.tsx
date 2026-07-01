@@ -19,8 +19,9 @@ export function GamesGrid({ games }: { games: Game[] }) {
   );
 }
 
-/** Rail orizzontale di giochi (lobby). Snap-scroll su mobile. */
-export function GamesRail({ games }: { games: Game[] }) {
+/** Rail orizzontale di giochi (lobby). Snap-scroll su mobile.
+ *  `ranked` mostra il numerale di classifica (rail "più caldi"). */
+export function GamesRail({ games, ranked }: { games: Game[]; ranked?: boolean }) {
   const navigate = useNavigate();
   return (
     <Rail>
@@ -29,6 +30,7 @@ export function GamesRail({ games }: { games: Game[] }) {
           key={g.slug}
           game={g}
           index={i}
+          rank={ranked ? i + 1 : undefined}
           onOpen={(slug) => navigate(`/game/${slug}`)}
         />
       ))}

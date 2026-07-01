@@ -4,6 +4,11 @@ import { MY_WALLET, ACHIEVEMENTS } from "../mock/wallet";
 
 const unlocked = ACHIEVEMENTS.filter((a) => a.unlocked).length;
 
+const LEVEL = 7;
+const XP_NOW = 6820;
+const XP_NEXT = 10000;
+const XP_PCT = Math.round((XP_NOW / XP_NEXT) * 100);
+
 const STATS = [
   { label: "Giri totali", value: "1.284", accent: "var(--wc-cyan)" },
   { label: "Vincita record", value: "48.000", suffix: "WC", accent: "var(--wc-gold-2)" },
@@ -48,20 +53,83 @@ export function ProfilePage() {
         >
           {ME.avatar}
         </span>
-        <div style={{ flex: 1, minWidth: 140 }}>
+        <div style={{ flex: 1, minWidth: 180 }}>
           <div
             style={{
-              fontFamily: "var(--wc-font-display)",
-              fontWeight: 800,
-              fontSize: 26,
-              letterSpacing: -0.6,
-              lineHeight: 1.05,
+              display: "flex",
+              alignItems: "center",
+              gap: 9,
+              flexWrap: "wrap",
             }}
           >
-            {ME.name}
+            <span
+              style={{
+                fontFamily: "var(--wc-font-display)",
+                fontWeight: 800,
+                fontSize: 26,
+                letterSpacing: -0.6,
+                lineHeight: 1.05,
+              }}
+            >
+              {ME.name}
+            </span>
+            <span
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 4,
+                padding: "3px 9px",
+                borderRadius: "var(--wc-radius-pill)",
+                background: "rgba(245,197,66,0.14)",
+                border: "1px solid rgba(245,197,66,0.34)",
+                color: "var(--wc-gold-2)",
+                fontFamily: "var(--wc-font-display)",
+                fontWeight: 800,
+                fontSize: 11,
+                letterSpacing: 0.4,
+                textTransform: "uppercase",
+              }}
+            >
+              ★ Livello {LEVEL}
+            </span>
           </div>
-          <div style={{ color: "var(--wc-text-dim)", fontSize: 13, marginTop: 2 }}>
+          <div style={{ color: "var(--wc-text-dim)", fontSize: 13, margin: "3px 0 9px" }}>
             Membro fondatore della crew
+          </div>
+          {/* barra XP verso il livello successivo */}
+          <div
+            style={{
+              position: "relative",
+              height: 8,
+              borderRadius: "var(--wc-radius-pill)",
+              background: "var(--wc-surface-solid-2)",
+              border: "1px solid var(--wc-border)",
+              overflow: "hidden",
+              maxWidth: 320,
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: `${XP_PCT}%`,
+                borderRadius: "var(--wc-radius-pill)",
+                background: "linear-gradient(90deg, var(--wc-violet-2), var(--wc-green))",
+                boxShadow: "0 0 14px -2px rgba(178,139,255,0.7)",
+              }}
+            />
+          </div>
+          <div
+            className="wc-num"
+            style={{
+              fontSize: 11,
+              fontWeight: 700,
+              color: "var(--wc-text-mute)",
+              marginTop: 5,
+            }}
+          >
+            {XP_NOW.toLocaleString("it-IT")} / {XP_NEXT.toLocaleString("it-IT")} XP · al Livello{" "}
+            {LEVEL + 1}
           </div>
         </div>
         <WalletBadge coins={MY_WALLET.coins} />

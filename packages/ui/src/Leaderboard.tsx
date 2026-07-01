@@ -1,10 +1,62 @@
 import { sortLeaderboard, type LeaderboardEntry } from "@whycasino/shared";
 
 const PODIUM = [
-  { ring: "var(--wc-gold)", h: 118, glow: "245,197,66" },
-  { ring: "#cfd6e3", h: 92, glow: "207,214,227" },
-  { ring: "#d38a4e", h: 74, glow: "211,138,78" },
+  { ring: "var(--wc-gold)", h: 132, glow: "245,197,66" },
+  { ring: "#cfd6e3", h: 100, glow: "207,214,227" },
+  { ring: "#d38a4e", h: 80, glow: "211,138,78" },
 ];
+
+function Crown({ color }: { color: string }) {
+  return (
+    <svg
+      width={26}
+      height={26}
+      viewBox="0 0 24 24"
+      aria-hidden
+      style={{ filter: `drop-shadow(0 3px 8px rgba(245,197,66,0.7))` }}
+    >
+      <path
+        d="M3 8.5l3.4 3.2L12 5l5.6 6.7L21 8.5 19.4 18H4.6L3 8.5Z"
+        fill={color}
+        stroke="rgba(0,0,0,0.25)"
+        strokeWidth="0.6"
+        strokeLinejoin="round"
+      />
+      <circle cx="12" cy="4.4" r="1.5" fill={color} />
+    </svg>
+  );
+}
+
+function Sparkles() {
+  const spots = [
+    { top: -6, left: "18%", d: 0 },
+    { top: 8, left: "84%", d: 0.6 },
+    { top: 34, left: "6%", d: 1.1 },
+    { top: 20, left: "96%", d: 1.6 },
+  ];
+  return (
+    <>
+      {spots.map((s, i) => (
+        <span
+          key={i}
+          aria-hidden
+          style={{
+            position: "absolute",
+            top: s.top,
+            left: s.left,
+            width: 8,
+            height: 8,
+            background:
+              "conic-gradient(from 0deg, transparent, var(--wc-gold-2), transparent 60%)",
+            borderRadius: 2,
+            animation: `wc-sparkle 2.4s ease-in-out ${s.d}s infinite`,
+            pointerEvents: "none",
+          }}
+        />
+      ))}
+    </>
+  );
+}
 
 function Avatar({ glyph, size, ring }: { glyph: string; size: number; ring?: string }) {
   return (
@@ -43,24 +95,77 @@ export function Leaderboard({
 
   return (
     <div style={{ display: "grid", gap: 16 }}>
-      {/* Podio */}
+      {/* Podio teatrale: raggi dietro il #1, corona, barre che crescono, scintille */}
       <div
         style={{
+          position: "relative",
           display: "flex",
           gap: 10,
           alignItems: "end",
           justifyContent: "center",
+          paddingTop: 34,
+          overflow: "hidden",
+          isolation: "isolate",
         }}
       >
+        {/* raggi dorati dietro al centro */}
+        <div
+          aria-hidden
+          className="wc-rays"
+          style={
+            {
+              width: 340,
+              height: 340,
+              left: "50%",
+              top: -6,
+              transform: "translateX(-50%)",
+              "--wc-ray-color": "rgba(245,197,66,0.4)",
+              opacity: 0.7,
+              zIndex: 0,
+            } as React.CSSProperties
+          }
+        />
         {[1, 0, 2].map((idx) => {
           const e = top[idx];
           if (!e) return null;
           const p = PODIUM[idx];
           const isMe = e.player.id === meId;
+          const isFirst = idx === 0;
           return (
-            <div key={e.player.id} style={{ textAlign: "center", width: 104 }}>
-              <div style={{ display: "grid", placeItems: "center", marginBottom: 6 }}>
-                <Avatar glyph={e.player.avatar || "🎭"} size={idx === 0 ? 56 : 46} ring={p.ring} />
+            <div
+              key={e.player.id}
+              className="wc-reveal"
+              style={
+                {
+                  position: "relative",
+                  textAlign: "center",
+                  width: 104,
+                  zIndex: 1,
+                  "--i": idx,
+                } as React.CSSProperties
+              }
+            >
+              {isFirst && <Sparkles />}
+              <div
+                style={{
+                  display: "grid",
+                  placeItems: "center",
+                  marginBottom: 6,
+                  position: "relative",
+                }}
+              >
+                {isFirst && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: -22,
+                      animation: "wc-float 4s ease-in-out infinite",
+                    }}
+                  >
+                    <Crown color="var(--wc-gold-2)" />
+                  </span>
+                )}
+                <Avatar glyph={e.player.avatar || "🎭"} size={isFirst ? 60 : 46} ring={p.ring} />
               </div>
               <div
                 style={{
@@ -95,6 +200,11 @@ export function Leaderboard({
                   fontWeight: 700,
                   fontSize: 20,
                   color: "#0b0b12",
+                  transformOrigin: "bottom",
+                  animation: `wc-bar-rise 0.75s cubic-bezier(0.16,1,0.3,1) ${idx * 0.09}s both`,
+                  boxShadow: isFirst
+                    ? "0 0 40px -10px rgba(245,197,66,0.6)"
+                    : "none",
                 }}
               >
                 <span

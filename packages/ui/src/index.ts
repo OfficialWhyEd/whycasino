@@ -13,3 +13,7 @@ export * from "./BetPanel";
 export * from "./Leaderboard";
 export * from "./Rail";
 export * from "./Segmented";
+export * from "./LiveWinsMarquee";
+export * from "./StatStrip";
+export * from "./FeaturedCarousel";
+export * from "./useParallax";

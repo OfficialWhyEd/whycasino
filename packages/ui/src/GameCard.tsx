@@ -2,20 +2,25 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import type { Game } from "@whycasino/shared";
 import { LiveBadge } from "./LiveBadge";
-import { CATEGORY_THEME, characterGlyph, characterName } from "./theme";
+import {
+  CATEGORY_THEME,
+  characterGlyph,
+  characterName,
+  isHot,
+  maxMultiplier,
+  playersOnline,
+} from "./theme";
 
 /** Cover con fallback premium a tema categoria (key-art credibile). */
 function Cover({ game }: { game: Game }) {
   const [broken, setBroken] = useState(false);
   const theme = CATEGORY_THEME[game.category];
   const glyph = characterGlyph(game.character);
-  // rotazione deterministica dallo slug: ogni tile ha un carattere diverso
   const rot = ((game.slug.charCodeAt(0) % 7) - 3) * 1.6;
 
   if (broken || !game.cover) {
     return (
       <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
-        {/* mesh di categoria su base scura */}
         <div
           style={{
             position: "absolute",
@@ -23,7 +28,6 @@ function Cover({ game }: { game: Game }) {
             background: `${theme.mesh}, linear-gradient(180deg, #12101f, #0a0912)`,
           }}
         />
-        {/* grana a puntini finissima per texture */}
         <div
           aria-hidden
           style={{
@@ -36,7 +40,6 @@ function Cover({ game }: { game: Game }) {
             mixBlendMode: "overlay",
           }}
         />
-        {/* iniziale tipografica come marchio */}
         <div
           aria-hidden
           style={{
@@ -53,7 +56,6 @@ function Cover({ game }: { game: Game }) {
         >
           {game.name.charAt(0)}
         </div>
-        {/* key-art: glyph del personaggio, grande e fluttuante */}
         {glyph && (
           <div
             aria-hidden
@@ -61,7 +63,7 @@ function Cover({ game }: { game: Game }) {
               {
                 position: "absolute",
                 right: -6,
-                top: "44%",
+                top: "42%",
                 transform: "translateY(-50%)",
                 fontSize: 92,
                 lineHeight: 1,
@@ -95,25 +97,75 @@ function Cover({ game }: { game: Game }) {
   );
 }
 
+function PlayGlyph() {
+  return (
+    <svg width={20} height={20} viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M8 5.5v13l11-6.5-11-6.5Z" fill="currentColor" />
+    </svg>
+  );
+}
+
+/** Pill piccola riutilizzabile sopra la cover. */
+function Tag({
+  children,
+  bg,
+  border,
+  color,
+}: {
+  children: React.ReactNode;
+  bg: string;
+  border: string;
+  color: string;
+}) {
+  return (
+    <span
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 4,
+        padding: "2px 7px",
+        borderRadius: "var(--wc-radius-pill)",
+        background: bg,
+        border: `1px solid ${border}`,
+        color,
+        fontSize: 9.5,
+        fontWeight: 800,
+        letterSpacing: 0.5,
+        textTransform: "uppercase",
+        backdropFilter: "blur(4px)",
+        WebkitBackdropFilter: "blur(4px)",
+      }}
+    >
+      {children}
+    </span>
+  );
+}
+
 export function GameCard({
   game,
   onOpen,
   index = 0,
+  rank,
 }: {
   game: Game;
   onOpen: (slug: string) => void;
   index?: number;
+  /** Se presente, mostra un numerale ghost di classifica (rail "hot"). */
+  rank?: number;
 }) {
   const theme = CATEGORY_THEME[game.category];
   const subtitle = characterName(game.character) ?? theme.label;
+  const hot = isHot(game.slug) && !game.isLive;
+  const players = playersOnline(game.slug);
+  const mult = maxMultiplier(game.slug);
 
   return (
     <motion.button
       onClick={() => onOpen(game.slug)}
-      whileHover={{ y: -6, scale: 1.035 }}
-      whileTap={{ scale: 0.97 }}
+      whileHover={{ y: -8, scale: 1.035 }}
+      whileTap={{ scale: 0.96 }}
       transition={{ type: "spring", stiffness: 320, damping: 20, mass: 0.6 }}
-      className="wc-reveal"
+      className="wc-reveal wc-gamecard"
       aria-label={`${game.name} — ${theme.label}`}
       style={
         {
@@ -132,10 +184,14 @@ export function GameCard({
           willChange: "transform",
           WebkitTapHighlightColor: "transparent",
           "--i": index,
+          "--acc": theme.accent,
+          "--glow": theme.glow,
         } as React.CSSProperties
       }
     >
-      <Cover game={game} />
+      <div className="wc-gc-art">
+        <Cover game={game} />
+      </div>
 
       {/* sheen diagonale in loop lentissimo */}
       <span
@@ -154,11 +210,81 @@ export function GameCard({
         }}
       />
 
-      {game.isLive && (
-        <div style={{ position: "absolute", top: 9, left: 9 }}>
-          <LiveBadge />
-        </div>
+      {/* numerale ghost di classifica (rail hot) */}
+      {rank != null && (
+        <span
+          aria-hidden
+          style={{
+            position: "absolute",
+            left: 6,
+            bottom: 44,
+            fontFamily: "var(--wc-font-display)",
+            fontWeight: 800,
+            fontSize: 76,
+            lineHeight: 0.8,
+            color: "rgba(255,255,255,0.16)",
+            textShadow: `0 2px 18px rgba(${theme.glow},0.5)`,
+            zIndex: 3,
+            pointerEvents: "none",
+          }}
+        >
+          {rank}
+        </span>
       )}
+
+      {/* top row: LIVE/HOT a sx, giocatori a dx */}
+      <div
+        style={{
+          position: "absolute",
+          top: 9,
+          left: 9,
+          right: 9,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          zIndex: 4,
+        }}
+      >
+        {game.isLive ? (
+          <LiveBadge />
+        ) : hot ? (
+          <Tag
+            bg="rgba(245,197,66,0.18)"
+            border="rgba(245,197,66,0.5)"
+            color="var(--wc-gold-2)"
+          >
+            🔥 Hot
+          </Tag>
+        ) : (
+          <span />
+        )}
+        <Tag
+          bg="rgba(8,8,16,0.5)"
+          border="var(--wc-border)"
+          color="var(--wc-text-dim)"
+        >
+          <span
+            aria-hidden
+            style={{
+              width: 5,
+              height: 5,
+              borderRadius: "50%",
+              background: "var(--wc-green)",
+              boxShadow: "0 0 6px var(--wc-green)",
+              animation: "wc-pulse-dot 1.6s ease-in-out infinite",
+            }}
+          />
+          <span className="wc-num">{players.toLocaleString("it-IT")}</span>
+        </Tag>
+      </div>
+
+      {/* play button reveal in hover */}
+      <span aria-hidden className="wc-gc-play">
+        <PlayGlyph />
+      </span>
+
+      {/* ring accent in hover */}
+      <span aria-hidden className="wc-gc-glow" />
 
       {/* scrim per leggibilità */}
       <div
@@ -171,21 +297,49 @@ export function GameCard({
         }}
       />
 
-      <div style={{ position: "absolute", left: 12, right: 12, bottom: 11 }}>
+      <div
+        className="wc-gc-meta"
+        style={{ position: "absolute", left: 12, right: 12, bottom: 11, zIndex: 4 }}
+      >
         <div
           style={{
-            fontSize: 10.5,
-            color: theme.accent,
-            fontWeight: 700,
-            textTransform: "uppercase",
-            letterSpacing: 0.7,
-            marginBottom: 2,
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            marginBottom: 3,
           }}
         >
-          {subtitle}
+          <span
+            style={{
+              fontSize: 10.5,
+              color: theme.accent,
+              fontWeight: 800,
+              textTransform: "uppercase",
+              letterSpacing: 0.7,
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              flex: "0 1 auto",
+            }}
+          >
+            {subtitle}
+          </span>
+          <span
+            className="wc-num"
+            style={{
+              flex: "0 0 auto",
+              fontSize: 9.5,
+              fontWeight: 800,
+              color: "var(--wc-gold-2)",
+              background: "rgba(245,197,66,0.12)",
+              border: "1px solid rgba(245,197,66,0.3)",
+              borderRadius: "var(--wc-radius-pill)",
+              padding: "1px 6px",
+              letterSpacing: 0.2,
+            }}
+          >
+            {mult}x
+          </span>
         </div>
         <div
           style={{
